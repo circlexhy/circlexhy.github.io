@@ -262,6 +262,22 @@ const homePage = `
     </div>
 `;
 
+const archivesPage = `
+    <p1>敬请期待</p1>
+`;
+
+const tagsPage = `
+    <p1>敬请期待</p1>
+`;
+
+const friendsPage = `
+    <p1>敬请期待</p1>
+`;
+
+const aboutPage = `
+    <p1>敬请期待</p1>
+`;
+
 // 其他页面（暂时留空，只显示占位内容）
 const emptyPage = (title, emoji, desc) => `
     <section class="page-transition flex flex-col items-center justify-center py-20 text-center">
@@ -280,19 +296,19 @@ const pages = {
     },
     archives: {
         title: 'FTS GithubPage | 归档',
-        content: emptyPage('📚 归档', '📚', '所有文章按时间整理在这里')
+        content: archivesPage
     },
     tags: {
         title: 'FTS GithubPage | 标签',
-        content: emptyPage('🏷️ 标签', '🏷️', '按标签分类浏览文章')
+        content: tagsPage
     },
     friends: {
         title: 'FTS GithubPage | 友链',
-        content: emptyPage('🔗 友链', '🔗', '朋友们的小站')
+        content: friendsPage
     },
     about: {
         title: 'FTS GithubPage | 关于',
-        content: emptyPage('👤 关于', '👤', '关于本站和作者')
+        content: aboutPage
     }
 };
 
