@@ -294,27 +294,25 @@ function loadGiscus() {
 // ================================================================
 
 function navigateTo(pageName) {
-    // 获取页面数据
     const page = pages[pageName];
     if (!page) return;
 
-    // 更新内容（带淡入动画）
     const app = document.getElementById('app');
     app.innerHTML = page.content;
 
-    // 更新页面标题
     document.title = page.title;
-
-    // 更新 URL hash（不刷新页面）
     history.pushState({ page: pageName }, '', `#${pageName}`);
 
-    // 更新导航高亮
     document.querySelectorAll('.nav-link').forEach(link => {
         link.classList.toggle('active', link.dataset.page === pageName);
     });
 
-    // 滚动到顶部
     window.scrollTo({ top: 0, behavior: 'smooth' });
+
+    //  只有切换到首页时才加载评论
+    if (pageName === 'home') {
+        setTimeout(loadGiscus, 200);
+    }
 }
 
 // ================================================================
