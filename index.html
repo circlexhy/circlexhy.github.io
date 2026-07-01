@@ -119,27 +119,24 @@ to { opacity: 1; transform: translateY(0); }
 
 <!-- ================= Giscus 评论 ================= -->
 
-    <div class="bg-space-800 border border-space-border rounded-xl p-8 min-h-[300px] flex flex-col items-center justify-center text-space-muted font-mono text-sm">
-                <div class="w-full max-w-2xl text-left text-space-text">
-                    <!-- Giscus 脚本 -->
-                    <script src="https://giscus.app/client.js" 
-    data-repo="circlexhy/circlexhy.github.io" 
-    data-repo-id="R_kgDOSf6J8Q" 
-    data-category="Announcements" 
-    data-category-id="DIC_kwDOSf6J8c4C9Pdi" 
-    data-mapping="pathname" 
-    data-strict="0" 
-    data-reactions-enabled="1" 
-    data-emit-metadata="0" 
-    data-input-position="bottom" 
-    data-theme="preferred_color_scheme" 
-    data-lang="zh-CN" 
-    crossorigin="anonymous" 
-    async>
-</script>
-                    <noscript>Please enable JavaScript to view the comments powered by Giscus.</noscript>
-                </div>
-            </div>
+    <!-- ================= Giscus 评论（居中 + 宽度限制） ================= -->
+<div class="max-w-2xl mx-auto px-6 mt-16 w-full">
+    <script src="https://giscus.app/client.js" 
+        data-repo="circlexhy/circlexhy.github.io" 
+        data-repo-id="R_kgDOSf6J8Q" 
+        data-category="Announcements" 
+        data-category-id="DIC_kwDOSf6J8c4C9Pdi" 
+        data-mapping="pathname" 
+        data-strict="0" 
+        data-reactions-enabled="1" 
+        data-emit-metadata="0" 
+        data-input-position="bottom" 
+        data-theme="preferred_color_scheme" 
+        data-lang="zh-CN" 
+        crossorigin="anonymous" 
+        async>
+    </script>
+</div>
 <!-- ================= 页脚 ================= -->
 <footer class="border-t border-paper-border dark:border-ink-border mt-12">
 <div class="max-w-2xl mx-auto px-6 py-10 flex flex-col md:flex-row justify-between items-center text-xs text-paper-muted dark:text-ink-muted">
