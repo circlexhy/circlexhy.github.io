@@ -118,7 +118,11 @@ to { opacity: 1; transform: translateY(0); }
 </main>
 
 <!-- ================= Giscus 评论 ================= -->
-<script src="https://giscus.app/client.js" 
+
+    <div class="bg-space-800 border border-space-border rounded-xl p-8 min-h-[300px] flex flex-col items-center justify-center text-space-muted font-mono text-sm">
+                <div class="w-full max-w-2xl text-left text-space-text">
+                    <!-- Giscus 脚本 -->
+                    <script src="https://giscus.app/client.js" 
     data-repo="circlexhy/circlexhy.github.io" 
     data-repo-id="R_kgDOSf6J8Q" 
     data-category="Announcements" 
@@ -133,6 +137,9 @@ to { opacity: 1; transform: translateY(0); }
     crossorigin="anonymous" 
     async>
 </script>
+                    <noscript>Please enable JavaScript to view the comments powered by Giscus.</noscript>
+                </div>
+            </div>
 <!-- ================= 页脚 ================= -->
 <footer class="border-t border-paper-border dark:border-ink-border mt-12">
 <div class="max-w-2xl mx-auto px-6 py-10 flex flex-col md:flex-row justify-between items-center text-xs text-paper-muted dark:text-ink-muted">
