@@ -311,6 +311,7 @@ function navigateTo(pageName) {
 
     //  只有切换到首页时才加载评论
     if (pageName === 'home') {
+        giscusLoaded = false;
         setTimeout(loadGiscus, 200);
     }
 }
