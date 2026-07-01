@@ -117,26 +117,7 @@ to { opacity: 1; transform: translateY(0); }
     <!-- 默认由 JS 填充 -->
 </main>
 
-<!-- ================= Giscus 评论 ================= -->
 
-    <!-- ================= Giscus 评论（居中 + 宽度限制） ================= -->
-<div class="max-w-2xl mx-auto px-6 mt-16 w-full">
-    <script src="https://giscus.app/client.js" 
-        data-repo="circlexhy/circlexhy.github.io" 
-        data-repo-id="R_kgDOSf6J8Q" 
-        data-category="Announcements" 
-        data-category-id="DIC_kwDOSf6J8c4C9Pdi" 
-        data-mapping="pathname" 
-        data-strict="0" 
-        data-reactions-enabled="1" 
-        data-emit-metadata="0" 
-        data-input-position="bottom" 
-        data-theme="preferred_color_scheme" 
-        data-lang="zh-CN" 
-        crossorigin="anonymous" 
-        async>
-    </script>
-</div>
 <!-- ================= 页脚 ================= -->
 <footer class="border-t border-paper-border dark:border-ink-border mt-12">
 <div class="max-w-2xl mx-auto px-6 py-10 flex flex-col md:flex-row justify-between items-center text-xs text-paper-muted dark:text-ink-muted">
@@ -201,30 +182,19 @@ const homePage = `
             </span>
             <span class="flex items-center">
                 <svg class="w-4 h-4 mr-1.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-    <!-- 身体（椭圆） -->
-    <ellipse cx="12" cy="16" rx="7" ry="7.5"/>
-    <!-- 头部（圆） -->
-    <circle cx="12" cy="7.5" r="4.5"/>
-    <!-- 左眼 -->
-    <circle cx="10" cy="7" r="0.8" fill="currentColor"/>
-    <!-- 右眼 -->
-    <circle cx="14" cy="7" r="0.8" fill="currentColor"/>
-    <!-- 嘴巴（三角形） -->
-    <polygon points="11,9.5 13,9.5 12,11.5"/>
-    <!-- 围巾（一条弧线） -->
-    <path d="M7 10.5 Q12 13 17 10.5"/>
-    <!-- 左翅膀 -->
-    <path d="M5.5 15 L2 19 L5.5 18.5"/>
-    <!-- 右翅膀 -->
-    <path d="M18.5 15 L22 19 L18.5 18.5"/>
-    <!-- 左脚 -->
-    <path d="M8.5 23 L11 23 L10 21.5"/>
-    <!-- 右脚 -->
-    <path d="M15.5 23 L13 23 L14 21.5"/>
-    <!-- 肚子白色区域（一个小弧形） -->
-    <path d="M9 14 Q12 18 15 14" stroke="none" fill="currentColor" fill-opacity="0.15"/>
-</svg>
-3364139412
+                    <ellipse cx="12" cy="16" rx="7" ry="7.5"/>
+                    <circle cx="12" cy="7.5" r="4.5"/>
+                    <circle cx="10" cy="7" r="0.8" fill="currentColor"/>
+                    <circle cx="14" cy="7" r="0.8" fill="currentColor"/>
+                    <polygon points="11,9.5 13,9.5 12,11.5"/>
+                    <path d="M7 10.5 Q12 13 17 10.5"/>
+                    <path d="M5.5 15 L2 19 L5.5 18.5"/>
+                    <path d="M18.5 15 L22 19 L18.5 18.5"/>
+                    <path d="M8.5 23 L11 23 L10 21.5"/>
+                    <path d="M15.5 23 L13 23 L14 21.5"/>
+                    <path d="M9 14 Q12 18 15 14" stroke="none" fill="currentColor" fill-opacity="0.15"/>
+                </svg>
+                3364139412
             </span>
         </div>
     </section>
@@ -238,14 +208,14 @@ const homePage = `
     <br>
     
     <section>
-        <h2 class="text-xs font-bold uppercase tracking-widest text-paper-muted dark:text-ink-muted mb-8 flex items-center">
+        <h2 class="text-xs font-bold uppercase tracking-widest text-paper-muted dark:text-ink-muted mb-6 flex items-center">
             <span class="w-8 h-px bg-paper-border dark:bg-ink-border mr-4"></span>
             Comments
         </h2>
+        <!-- ✅ giscus 容器 -->
+        <div id="giscus-container"></div>
     </section>
-    
-    
-    `;
+`;
 
 const archivesPage = `
     <p1>敬请期待</p1>
@@ -288,6 +258,37 @@ const pages = {
     }
 };
 
+// ================================================================
+// 3. 加载 giscus 评论（只加载一次）
+// ================================================================
+
+let giscusLoaded = false;
+
+function loadGiscus() {
+    const container = document.getElementById('giscus-container');
+    if (!container) return;
+    if (giscusLoaded) return;
+    if (container.querySelector('iframe')) return;
+
+    const script = document.createElement('script');
+    script.src = 'https://giscus.app/client.js';
+    script.setAttribute('data-repo', 'circlexhy/circlexhy.github.io');
+    script.setAttribute('data-repo-id', 'R_kgDOSf6J8Q');
+    script.setAttribute('data-category', 'Announcements');
+    script.setAttribute('data-category-id', 'DIC_kwDOSf6J8c4C9Pdi');
+    script.setAttribute('data-mapping', 'pathname');
+    script.setAttribute('data-strict', '0');
+    script.setAttribute('data-reactions-enabled', '1');
+    script.setAttribute('data-emit-metadata', '0');
+    script.setAttribute('data-input-position', 'bottom');
+    script.setAttribute('data-theme', 'preferred_color_scheme');
+    script.setAttribute('data-lang', 'zh-CN');
+    script.setAttribute('crossorigin', 'anonymous');
+    script.async = true;
+    
+    container.appendChild(script);
+    giscusLoaded = true;
+}
 // ================================================================
 // 3. 导航核心函数
 // ================================================================
