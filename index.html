@@ -7,9 +7,10 @@
 <!-- 引入 Tailwind CSS -->
 <script src="https://cdn.tailwindcss.com"></script>
 <!-- 引入字体 -->
+<!-- 在 head 中确保已引入 Inter 的细字重 -->
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Noto+Serif+SC:wght@400;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700&display=swap" rel="stylesheet">
 <script>
 tailwind.config = {
 darkMode: 'class',
@@ -162,9 +163,9 @@ document.addEventListener('keydown', (e) => {
 // 首页内容（你原有的所有内容）
 const homePage = `
     <section class="mb-20 page-transition">
-        <h1 class="text-3xl font-serif font-bold text-paper-text dark:text-ink-text mb-4 leading-snug">
-            Hello, I'm circlexhy.
-        </h1>
+        <h1 class="text-3xl font-sans font-light text-paper-text dark:text-ink-text mb-4 leading-snug">
+    Hello, I'm circlexhy.
+</h1>
         <p class="text-lg text-paper-muted dark:text-ink-muted leading-relaxed">
             这里是我的网站。主要开发小工具，记录神秘教程<br>
             相信代码如诗，追求极简与优雅。<br>
