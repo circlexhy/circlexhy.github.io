@@ -96,9 +96,9 @@ to { opacity: 1; transform: translateY(0); }
     <!-- Nav Links -->
     <nav class="flex items-center space-x-6 text-sm text-paper-muted dark:text-ink-muted font-medium">
         <a href="#" data-page="home" class="nav-link link-underline hover:text-paper-text dark:hover:text-ink-text active">首页</a>
-        <a href="#" data-page="archives" class="nav-link link-underline hover:text-paper-text dark:hover:text-ink-text">归档</a>
-        <a href="#" data-page="tags" class="nav-link link-underline hover:text-paper-text dark:hover:text-ink-text">标签</a>
-        <a href="#" data-page="friends" class="nav-link link-underline hover:text-paper-text dark:hover:text-ink-text">友链</a>
+        <a href="#" data-page="blogs" class="nav-link link-underline hover:text-paper-text dark:hover:text-ink-text">博客</a>
+        <a href="#" data-page="articles" class="nav-link link-underline hover:text-paper-text dark:hover:text-ink-text">文章</a>
+        <a href="#" data-page="tools" class="nav-link link-underline hover:text-paper-text dark:hover:text-ink-text">工具</a>
         <a href="#" data-page="about" class="nav-link link-underline hover:text-paper-text dark:hover:text-ink-text">关于</a>
         <!-- 搜索按钮 -->
         <button class="p-1 hover:text-paper-text dark:hover:text-ink-text transition" title="Search (Ctrl+K)">
@@ -218,15 +218,15 @@ const homePage = `
     </section>
 `;
 
-const archivesPage = `
+const blogsPage = `
     <p1>敬请期待</p1>
 `;
 
-const tagsPage = `
+const articlesPage = `
     <p1>敬请期待</p1>
 `;
 
-const friendsPage = `
+const toolsPage = `
     <p1>敬请期待</p1>
 `;
 
@@ -241,17 +241,17 @@ const pages = {
         title: 'FingertipSpace | 首页',
         content: homePage
     },
-    archives: {
-        title: 'FingertipSpace | 归档',
-        content: archivesPage
+    blogs: {
+        title: 'FingertipSpace | 博客',
+        content: blogsPage
     },
-    tags: {
-        title: 'FingertipSpace | 标签',
-        content: tagsPage
+    articles: {
+        title: 'FingertipSpace | 文章',
+        content: articlesPage
     },
-    friends: {
-        title: 'FingertipSpace | 友链',
-        content: friendsPage
+    tools: {
+        title: 'FingertipSpace | 工具',
+        content: toolsPage
     },
     about: {
         title: 'FingertipSpace | 关于',
