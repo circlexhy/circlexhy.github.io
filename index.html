@@ -220,21 +220,21 @@ const homePage = `
 
 const blogsPage = `
     <section class="page-transition">
-        <h1 class="text-3xl font-sans font-light text-paper-text dark:text-ink-text mb-8 tracking-wide">📚 博客</h1>
+        <h1 class="text-3xl font-sans font-light text-paper-text dark:text-ink-text mb-8 tracking-wide">博客</h1>
         <p class="text-paper-muted dark:text-ink-muted">敬请期待...</p>
     </section>
 `;
 
 const articlesPage = `
     <section class="page-transition">
-        <h1 class="text-3xl font-sans font-light text-paper-text dark:text-ink-text mb-8 tracking-wide">📖 文章</h1>
+        <h1 class="text-3xl font-sans font-light text-paper-text dark:text-ink-text mb-8 tracking-wide">文章</h1>
         <p class="text-paper-muted dark:text-ink-muted">敬请期待...</p>
     </section>
 `;
 
 const toolsPage = `
     <section class="page-transition">
-        <h1 class="text-3xl font-sans font-light text-paper-text dark:text-ink-text mb-8 tracking-wide">🔧 工具</h1>
+        <h1 class="text-3xl font-sans font-light text-paper-text dark:text-ink-text mb-8 tracking-wide">工具</h1>
         <p class="text-paper-muted dark:text-ink-muted">敬请期待...</p>
     </section>
 `;
@@ -289,7 +289,7 @@ const aboutPage = `
             <!-- 错误状态（默认隐藏） -->
             <div id="github-error" class="hidden text-center py-6 text-[#da3633]">
                 <p>failed!!!</p>
-                <p class="text-sm text-paper-muted dark:text-ink-muted mt-1">请稍后刷新重试</p>
+                <p class="text-sm text-paper-muted dark:text-ink-muted mt-1">Please try again.</p>
             </div>
 <div class="text-paper-muted dark:text-ink-muted text-sm leading-relaxed space-y-3">
             <span class="flex items-center">
@@ -408,11 +408,11 @@ async function loadGitHubProfile() {
         document.getElementById('gh-name').textContent = data.name || data.login;
         document.getElementById('gh-link').href = data.html_url;
         document.getElementById('gh-link').textContent = `@${data.login}`;
-        document.getElementById('gh-bio').textContent = data.bio || '这个人很懒，什么都没写~';
+        document.getElementById('gh-bio').textContent = data.bio || 'Nothing';
         document.getElementById('gh-repos').textContent = data.public_repos || 0;
         document.getElementById('gh-followers').textContent = data.followers || 0;
         document.getElementById('gh-following').textContent = data.following || 0;
-        document.getElementById('gh-location').textContent = data.location || '🌍 未知';
+        document.getElementById('gh-location').textContent = data.location || 'Unknown';
 
         loading.classList.add('hidden');
         content.classList.remove('hidden');
