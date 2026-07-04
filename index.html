@@ -241,7 +241,7 @@ const toolsPage = `
 
 const aboutPage = `
     <section class="page-transition">
-        <h1 class="text-3xl font-sans font-light text-paper-text dark:text-ink-text mb-8 tracking-wide">👤 关于我</h1>
+        <h1 class="text-3xl font-sans font-light text-paper-text dark:text-ink-text mb-8 tracking-wide">About me</h1>
 
         <!-- GitHub 用户卡片 -->
         <div id="github-card" class="bg-paper-surface dark:bg-ink-surface border border-paper-border dark:border-ink-border rounded-2xl p-6 mb-8">
@@ -268,19 +268,19 @@ const aboutPage = `
                 <p id="gh-bio" class="text-paper-muted dark:text-ink-muted text-sm leading-relaxed mb-4">加载中...</p>
                 <div class="flex flex-wrap gap-6 text-sm">
                     <div>
-                        <span class="text-paper-muted dark:text-ink-muted">📦 仓库</span>
+                        <span class="text-paper-muted dark:text-ink-muted">仓库</span>
                         <span id="gh-repos" class="text-paper-text dark:text-ink-text font-medium ml-1">-</span>
                     </div>
                     <div>
-                        <span class="text-paper-muted dark:text-ink-muted">👥 粉丝</span>
+                        <span class="text-paper-muted dark:text-ink-muted">粉丝</span>
                         <span id="gh-followers" class="text-paper-text dark:text-ink-text font-medium ml-1">-</span>
                     </div>
                     <div>
-                        <span class="text-paper-muted dark:text-ink-muted">👤 关注</span>
+                        <span class="text-paper-muted dark:text-ink-muted">关注</span>
                         <span id="gh-following" class="text-paper-text dark:text-ink-text font-medium ml-1">-</span>
                     </div>
                     <div>
-                        <span class="text-paper-muted dark:text-ink-muted">📍 位置</span>
+                        <span class="text-paper-muted dark:text-ink-muted">位置</span>
                         <span id="gh-location" class="text-paper-text dark:text-ink-text font-medium ml-1">-</span>
                     </div>
                 </div>
@@ -291,14 +291,36 @@ const aboutPage = `
                 <p>failed!!!</p>
                 <p class="text-sm text-paper-muted dark:text-ink-muted mt-1">请稍后刷新重试</p>
             </div>
+<div class="text-paper-muted dark:text-ink-muted text-sm leading-relaxed space-y-3">
+            <span class="flex items-center">
+                <svg class="w-4 h-4 mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
+                Hunan,China
+            </span>
+            <span class="flex items-center">
+                <svg class="w-4 h-4 mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg>
+                xhyxhyxhy_xs@qq.com
+            </span>
+            <span class="flex items-center">
+                <svg class="w-4 h-4 mr-1.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                    <ellipse cx="12" cy="16" rx="7" ry="7.5"/>
+                    <circle cx="12" cy="7.5" r="4.5"/>
+                    <circle cx="10" cy="7" r="0.8" fill="currentColor"/>
+                    <circle cx="14" cy="7" r="0.8" fill="currentColor"/>
+                    <polygon points="11,9.5 13,9.5 12,11.5"/>
+                    <path d="M7 10.5 Q12 13 17 10.5"/>
+                    <path d="M5.5 15 L2 19 L5.5 18.5"/>
+                    <path d="M18.5 15 L22 19 L18.5 18.5"/>
+                    <path d="M8.5 23 L11 23 L10 21.5"/>
+                    <path d="M15.5 23 L13 23 L14 21.5"/>
+                    <path d="M9 14 Q12 18 15 14" stroke="none" fill="currentColor" fill-opacity="0.15"/>
+                </svg>
+                3364139412
+            </span>
+        </div>
         </div>
 
         <!-- 网站简介 -->
-        <div class="text-paper-muted dark:text-ink-muted text-sm leading-relaxed space-y-3">
-            <p>🚀 这里是我的数字花园，主要记录前端开发、工具构建和一些神秘教程。</p>
-            <p>💻 技术栈：JavaScript / Tailwind CSS / GitHub Pages / Netlify</p>
-            <p>📮 联系我：<a href="mailto:xhyxhyxhy_xs@qq.com" class="text-blue-600 dark:text-blue-400 hover:underline">xhyxhyxhy_xs@qq.com</a></p>
-        </div>
+        
     </section>
 `;
 
