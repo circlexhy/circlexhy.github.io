@@ -1,0 +1,13 @@
+{
+  "posts": [
+    {
+      "title": "test2",
+      "date": "2026-07-09",
+      "tags": [
+        "tech"
+      ],
+      "slug": "test2",
+      "url": "/blogs/test2.html"
+    }
+  ]
+}
