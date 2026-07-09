@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>发布博客</title>
+</head>
+<body>
+    <h1>发布新文章</h1>
+    <form id="publishForm">
+        <input type="text" id="title" placeholder="文章标题" required>
+        <input type="date" id="date">
+        <input type="text" id="tags" placeholder="标签，用逗号分隔">
+        <textarea id="content" placeholder="正文（Markdown格式）" rows="10" required></textarea>
+        <button type="submit">发布</button>
+    </form>
+    <div id="result"></div>
+
+    <script>
+        document.getElementById('publishForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const title = document.getElementById('title').value;
+            const date = document.getElementById('date').value;
+            const tags = document.getElementById('tags').value;
+            const content = document.getElementById('content').value;
+
+            const resultDiv = document.getElementById('result');
+            resultDiv.textContent = '发布中...';
+
+            try {
+                const response = await fetch('https://githubsendblogsbackend.netlify.app/.netlify/functions/publish', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ title, date, tags, content })
+                });
+
+                const data = await response.json();
+                
+                if (data.success) {
+                    resultDiv.innerHTML = `✅ 发布成功！<br>🔗 ${data.url}`;
+                } else {
+                    resultDiv.innerHTML = `❌ 发布失败：${data.error}`;
+                }
+            } catch (error) {
+                resultDiv.innerHTML = `❌ 网络错误：${error.message}`;
+            }
+        });
+    </script>
+</body>
+</html>
