@@ -162,7 +162,7 @@ themeToggle.addEventListener('click', () => {
 document.addEventListener('keydown', (e) => {
     if ((e.metaKey || e.ctrlKey) && e.key === 'k') {
         e.preventDefault();
-        alert('🔍 本地搜索功能 (可接入 Hexo 的 algolia 或 local-search 插件)');
+        alert('本地搜索功能 (可接入 Hexo 的 algolia 或 local-search 插件)');
     }
 });
 
@@ -516,7 +516,7 @@ function renderPostList(posts, page, pageSize, type) {
     let html = `
         <section class="page-transition">
             <h1 class="text-3xl font-sans font-light text-paper-text dark:text-ink-text mb-2 tracking-wide">
-                ${type === 'blogs' ? '📝 博客' : '📄 文章'}
+                ${type === 'blogs' ? '博客' : '文章'}
             </h1>
             <p class="text-paper-muted dark:text-ink-muted text-sm mb-8">
                 共 ${totalPosts} 篇${typeLabel}
@@ -541,8 +541,8 @@ function renderPostList(posts, page, pageSize, type) {
                         </h2>
                     </a>
                     <div class="flex flex-wrap items-center gap-3 text-xs text-paper-muted dark:text-ink-muted mt-2">
-                        <span>📅 ${post.date || '未知日期'}</span>
-                        ${tagsHtml ? `<span>🏷️ ${tagsHtml}</span>` : ''}
+                        <span>${post.date || '未知日期'}</span>
+                        ${tagsHtml ? `<span>${tagsHtml}</span>` : ''}
                     </div>
                 </article>
             `;
