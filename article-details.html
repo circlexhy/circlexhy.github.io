@@ -8,6 +8,7 @@
     <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="icon" href="untitled.svg" type="image/svg+xml">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Noto+Serif+SC:wght@300;400;600;700&display=swap" rel="stylesheet">
     <!-- 引入微软雅黑字体 -->
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;700&display=swap" rel="stylesheet">
@@ -232,9 +233,10 @@
     <!-- ===== 顶部导航 ===== -->
     <header class="sticky top-0 z-50 bg-white/80 dark:bg-ink-bg/80 backdrop-blur-md border-b border-paper-border dark:border-ink-border">
         <div class="max-w-2xl mx-auto px-6 py-4 flex justify-between items-center">
-            <a href="/" class="text-xl font-serif font-bold text-paper-text dark:text-ink-text hover:text-gray-500 transition">
-                FingertipSpace<span class="text-blue-500">.</span>
-            </a>
+            <a href="#" onclick="navigateTo('home')" class="text-xl font-serif font-bold text-paper-text dark:text-ink-text hover:text-gray-500 transition cursor-pointer flex items-center gap-2">
+        <img src="untitled.svg" alt="FingertipSpace Icon" class="w-6 h-6 object-contain">
+        <span>FingertipSpace</span>
+    </a>
             <nav class="flex items-center space-x-6 text-sm text-paper-muted dark:text-ink-muted font-medium">
                 <a href="/" class="link-underline hover:text-paper-text dark:hover:text-ink-text">首页</a>
                 <a href="../" class="link-underline hover:text-paper-text dark:hover:text-ink-text text-[#3fb950]">返回</a>
