@@ -514,20 +514,25 @@ function renderPostList(posts, page, pageSize, type) {
     const typeLabel = type === 'blogs' ? '博客' : '文章';
     
     let html = `
-        <section class="page-transition">
+    <section class="page-transition">
+        <div class="flex items-start justify-between mb-2">
             <div>
-            <h1 class="text-3xl font-sans font-light text-paper-text dark:text-ink-text mb-2 tracking-wide">
-                ${type === 'blogs' ? '博客' : '文章'}
-            </h1>
-            <p class="text-paper-muted dark:text-ink-muted text-sm mb-8">
-                共 ${totalPosts} 篇${typeLabel}
-            </p>
-            <a href="send.html" class="create-btn flex-shrink-0">
-                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
+                <h1 class="text-3xl font-sans font-light text-paper-text dark:text-ink-text tracking-wide">
+                    ${type === 'blogs' ? '博客' : '文章'}
+                </h1>
+                <p class="text-paper-muted dark:text-ink-muted text-sm">
+                    共 ${totalPosts} 篇${typeLabel}
+                </p>
+            </div>
+            <a href="send.html" 
+               class="flex items-center gap-1.5 px-4 py-2 bg-[#3fb950] text-[#0d1117] font-medium text-sm rounded-lg hover:bg-[#2ea043] transition shadow-sm flex-shrink-0 mt-1">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4"/>
+                </svg>
                 <span>新文章</span>
             </a>
-            </div>
-    `;
+        </div>
+`;
     
     if (pagePosts.length === 0) {
         html += `<p class="text-paper-muted dark:text-ink-muted">暂无文章</p>`;
