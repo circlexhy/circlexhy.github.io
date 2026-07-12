@@ -122,9 +122,10 @@
 <!-- ===== 顶部导航 ===== -->
 <header class="sticky top-0 z-50 bg-white/80 dark:bg-ink-bg/80 backdrop-blur-md border-b border-paper-border dark:border-ink-border">
     <div class="max-w-2xl mx-auto px-6 py-4 flex justify-between items-center">
-        <a href="/" class="text-xl font-serif font-bold text-paper-text dark:text-ink-text hover:text-gray-500 transition">
-            FingertipSpace<span class="text-blue-500">.</span>
-        </a>
+        <a href="#" onclick="navigateTo('home')" class="text-xl font-serif font-bold text-paper-text dark:text-ink-text hover:text-gray-500 transition cursor-pointer flex items-center gap-2">
+        <img src="untitled.svg" alt="FingertipSpace Icon" class="w-6 h-6 object-contain">
+        <span>FingertipSpace</span>
+    </a>
         <nav class="flex items-center space-x-6 text-sm text-paper-muted dark:text-ink-muted font-medium">
             <a href="/" class="link-underline hover:text-paper-text dark:hover:text-ink-text">首页</a>
             <a href="/publish.html" class="link-underline hover:text-paper-text dark:hover:text-ink-text text-[#3fb950]">写文章</a>
@@ -140,7 +141,6 @@
 <main class="max-w-2xl mx-auto px-6 py-12 page-transition">
     <div class="flex items-center justify-between mb-8">
         <h1 class="text-3xl font-sans font-light text-paper-text dark:text-ink-text mb-8 tracking-wide">发布文章</h1>
-        <span class="secret-hint">日期自动生成</span>
     </div>
 
     <!-- 表单（已移除日期输入框） -->
