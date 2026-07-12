@@ -7,9 +7,8 @@
 <!-- 引入 Tailwind CSS -->
 <script src="https://cdn.tailwindcss.com"></script>
 <!-- 引入字体 -->
-<!-- 在 head 中确保已引入 Inter 的细字重 -->
 <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="icon" href="untitled.svg" type="image/svg+xml">
+<link rel="icon" href="untitled.svg" type="image/svg+xml">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700&display=swap" rel="stylesheet">
 <script>
@@ -83,6 +82,19 @@ to { opacity: 1; transform: translateY(0); }
 ::-webkit-scrollbar-track { background: transparent; }
 ::-webkit-scrollbar-thumb { background: #d1d5db; border-radius: 3px; }
 .dark ::-webkit-scrollbar-thumb { background: #4b5563; }
+
+/* 加载动画 */
+.loading-spinner {
+border: 3px solid #e5e7eb;
+border-top-color: #3fb950;
+border-radius: 50%;
+width: 40px;
+height: 40px;
+animation: spin 0.8s linear infinite;
+}
+@keyframes spin {
+to { transform: rotate(360deg); }
+}
 </style>
 </head>
 <body class="font-sans antialiased selection:bg-gray-200 dark:selection:bg-gray-700">
@@ -132,7 +144,7 @@ to { opacity: 1; transform: translateY(0); }
 
 <script>
 // ================================================================
-// 1. 主题切换逻辑（保持不变）
+// 1. 主题切换逻辑
 // ================================================================
 const themeToggle = document.getElementById('theme-toggle');
 const htmlEl = document.documentElement;
@@ -158,7 +170,7 @@ document.addEventListener('keydown', (e) => {
 // 2. SPA 页面定义
 // ================================================================
 
-// 首页内容（你原有的所有内容）
+// 首页内容
 const homePage = `
     <section class="mb-20 page-transition">
         <h1 class="text-3xl font-sans font-light text-paper-text dark:text-ink-text mb-4 leading-snug">
@@ -211,22 +223,27 @@ const homePage = `
             <span class="w-8 h-px bg-paper-border dark:bg-ink-border mr-4"></span>
             Comments
         </h2>
-        <!-- ✅ giscus 容器 -->
+        <!-- giscus 容器 -->
         <div id="giscus-container"></div>
     </section>
 `;
 
+// 博客/文章列表页（加载状态占位，由 JS 动态填充）
 const blogsPage = `
-    <section class="page-transition">
-        <h1 class="text-3xl font-sans font-light text-paper-text dark:text-ink-text mb-8 tracking-wide">blogs / 博客</h1>
-        <p class="text-paper-muted dark:text-ink-muted">敬请期待...</p>
+    <section class="page-transition" id="blogs-list">
+        <div class="flex flex-col items-center justify-center py-20">
+            <div class="loading-spinner"></div>
+            <p class="text-paper-muted dark:text-ink-muted mt-4 text-sm">加载中...</p>
+        </div>
     </section>
 `;
 
 const articlesPage = `
-    <section class="page-transition">
-        <h1 class="text-3xl font-sans font-light text-paper-text dark:text-ink-text mb-8 tracking-wide">Articles / 文章</h1>
-        <p class="text-paper-muted dark:text-ink-muted">敬请期待...</p>
+    <section class="page-transition" id="articles-list">
+        <div class="flex flex-col items-center justify-center py-20">
+            <div class="loading-spinner"></div>
+            <p class="text-paper-muted dark:text-ink-muted mt-4 text-sm">加载中...</p>
+        </div>
     </section>
 `;
 
@@ -317,14 +334,12 @@ const aboutPage = `
             </span>
         </div>
         </div>
-
-        <!-- 网站简介 -->
-        
     </section>
 `;
 
-
-// 页面路由表
+// ================================================================
+// 3. 页面路由表
+// ================================================================
 const pages = {
     home: {
         title: 'FingertipSpace | 首页',
@@ -349,9 +364,8 @@ const pages = {
 };
 
 // ================================================================
-// 3. 加载 giscus 评论（只加载一次）
+// 4. 加载 giscus 评论
 // ================================================================
-
 let giscusLoaded = false;
 
 function loadGiscus() {
@@ -381,9 +395,8 @@ function loadGiscus() {
 }
 
 // ================================================================
-// 4. 加载 GitHub 用户信息
+// 5. 加载 GitHub 用户信息
 // ================================================================
-
 let githubLoaded = false;
 
 async function loadGitHubProfile() {
@@ -426,7 +439,182 @@ async function loadGitHubProfile() {
 }
 
 // ================================================================
-// 5. 导航核心函数
+// 6. 文章列表核心功能（分页 + 加载）
+// ================================================================
+
+// 缓存
+let postsCache = {
+    blogs: [],
+    articles: []
+};
+
+let currentPage = {
+    blogs: 1,
+    articles: 1
+};
+
+const PAGE_SIZE = 10;
+
+// 从 GitHub 获取文章列表
+async function fetchPostsFromGitHub(type) {
+    const baseUrl = `https://api.github.com/repos/circlexhy/circlexhy.github.io/contents/${type}/json`;
+    
+    try {
+        const response = await fetch(baseUrl, {
+            headers: { 'Accept': 'application/vnd.github.v3+json' }
+        });
+        
+        if (!response.ok) {
+            if (response.status === 404) {
+                return [];
+            }
+            throw new Error(`GitHub API 请求失败: ${response.status}`);
+        }
+        
+        const files = await response.json();
+        const posts = [];
+        
+        for (const file of files) {
+            if (file.name.endsWith('.json')) {
+                try {
+                    const contentRes = await fetch(file.download_url);
+                    const data = await contentRes.json();
+                    if (data.posts && data.posts.length > 0) {
+                        posts.push(data.posts[0]);
+                    }
+                } catch (e) {
+                    console.warn(`读取 ${file.name} 失败:`, e);
+                }
+            }
+        }
+        
+        // 按日期排序（最新的在前）
+        posts.sort((a, b) => {
+            if (a.date && b.date) {
+                return new Date(b.date) - new Date(a.date);
+            }
+            return 0;
+        });
+        
+        return posts;
+    } catch (error) {
+        console.error('获取文章列表失败:', error);
+        return [];
+    }
+}
+
+// 渲染文章列表
+function renderPostList(posts, page, pageSize, type) {
+    const totalPosts = posts.length;
+    const totalPages = Math.ceil(totalPosts / pageSize) || 1;
+    const start = (page - 1) * pageSize;
+    const end = Math.min(start + pageSize, totalPosts);
+    const pagePosts = posts.slice(start, end);
+    
+    const typeLabel = type === 'blogs' ? '博客' : '文章';
+    
+    let html = `
+        <section class="page-transition">
+            <h1 class="text-3xl font-sans font-light text-paper-text dark:text-ink-text mb-2 tracking-wide">
+                ${type === 'blogs' ? '📝 博客' : '📄 文章'}
+            </h1>
+            <p class="text-paper-muted dark:text-ink-muted text-sm mb-8">
+                共 ${totalPosts} 篇${typeLabel}
+            </p>
+    `;
+    
+    if (pagePosts.length === 0) {
+        html += `<p class="text-paper-muted dark:text-ink-muted">暂无文章</p>`;
+    } else {
+        html += `<div class="space-y-6">`;
+        for (const post of pagePosts) {
+            const tagsHtml = post.tags && post.tags.length > 0 
+                ? post.tags.map(t => `<span class="px-2 py-0.5 bg-paper-hover dark:bg-ink-hover rounded-full text-xs">${t}</span>`).join(' ')
+                : '';
+            
+            html += `
+                <article class="group border-b border-paper-border dark:border-ink-border pb-5 last:border-0">
+                    <a href="/article-details.html?type=${type}&postname=${post.slug}" 
+                       class="block group-hover:text-[#3fb950] transition">
+                        <h2 class="text-xl font-serif font-bold text-paper-text dark:text-ink-text group-hover:text-[#3fb950] transition">
+                            ${post.title || '无标题'}
+                        </h2>
+                    </a>
+                    <div class="flex flex-wrap items-center gap-3 text-xs text-paper-muted dark:text-ink-muted mt-2">
+                        <span>📅 ${post.date || '未知日期'}</span>
+                        ${tagsHtml ? `<span>🏷️ ${tagsHtml}</span>` : ''}
+                    </div>
+                </article>
+            `;
+        }
+        html += `</div>`;
+    }
+    
+    // 分页导航
+    if (totalPages > 1) {
+        const prevDisabled = page <= 1 ? 'opacity-50 cursor-not-allowed pointer-events-none' : '';
+        const nextDisabled = page >= totalPages ? 'opacity-50 cursor-not-allowed pointer-events-none' : '';
+        
+        html += `
+            <div class="flex items-center justify-between mt-8 pt-4 border-t border-paper-border dark:border-ink-border">
+                <button onclick="loadPostList('${type}', ${page - 1})" 
+                        class="px-4 py-2 text-sm rounded-lg border border-paper-border dark:border-ink-border hover:border-[#3fb950] transition ${prevDisabled}">
+                    ← 上一页
+                </button>
+                <span class="text-sm text-paper-muted dark:text-ink-muted">
+                    第 ${page} / ${totalPages} 页
+                </span>
+                <button onclick="loadPostList('${type}', ${page + 1})" 
+                        class="px-4 py-2 text-sm rounded-lg border border-paper-border dark:border-ink-border hover:border-[#3fb950] transition ${nextDisabled}">
+                    下一页 →
+                </button>
+            </div>
+        `;
+    }
+    
+    html += `</section>`;
+    return html;
+}
+
+// 加载文章列表（外部调用）
+async function loadPostList(type, page = 1) {
+    // 如果缓存为空，从 GitHub 获取
+    if (postsCache[type].length === 0) {
+        const container = document.getElementById(`${type}-list`);
+        if (container) {
+            container.innerHTML = `
+                <div class="flex flex-col items-center justify-center py-20">
+                    <div class="loading-spinner"></div>
+                    <p class="text-paper-muted dark:text-ink-muted mt-4 text-sm">加载中...</p>
+                </div>
+            `;
+        }
+        
+        const posts = await fetchPostsFromGitHub(type);
+        postsCache[type] = posts;
+    }
+    
+    // 更新当前页码
+    const totalPages = Math.ceil(postsCache[type].length / PAGE_SIZE) || 1;
+    currentPage[type] = Math.max(1, Math.min(page, totalPages));
+    
+    // 渲染列表
+    const container = document.getElementById(`${type}-list`);
+    if (container) {
+        container.innerHTML = renderPostList(
+            postsCache[type], 
+            currentPage[type], 
+            PAGE_SIZE, 
+            type
+        );
+    }
+}
+
+// 全局暴露
+window.loadPostList = loadPostList;
+
+// ================================================================
+// 7. 导航核心函数
 // ================================================================
 
 function navigateTo(pageName) {
@@ -445,20 +633,30 @@ function navigateTo(pageName) {
 
     window.scrollTo({ top: 0, behavior: 'smooth' });
 
-    // 只有切换到首页时才加载评论
+    // 首页加载评论
     if (pageName === 'home') {
         giscusLoaded = false;
         setTimeout(loadGiscus, 200);
     }
 
-    // 切换到关于页时加载 GitHub 信息
+    // 关于页加载 GitHub 信息
     if (pageName === 'about') {
         setTimeout(loadGitHubProfile, 200);
+    }
+
+    // 博客/文章页加载列表
+    if (pageName === 'blogs') {
+        currentPage.blogs = 1;
+        setTimeout(() => loadPostList('blogs', 1), 100);
+    }
+    if (pageName === 'articles') {
+        currentPage.articles = 1;
+        setTimeout(() => loadPostList('articles', 1), 100);
     }
 }
 
 // ================================================================
-// 6. 绑定事件
+// 8. 绑定事件
 // ================================================================
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -481,6 +679,16 @@ document.addEventListener('DOMContentLoaded', () => {
             document.querySelectorAll('.nav-link').forEach(link => {
                 link.classList.toggle('active', link.dataset.page === page);
             });
+            
+            // 如果是博客/文章页，重新加载列表
+            if (page === 'blogs') {
+                currentPage.blogs = 1;
+                setTimeout(() => loadPostList('blogs', 1), 150);
+            }
+            if (page === 'articles') {
+                currentPage.articles = 1;
+                setTimeout(() => loadPostList('articles', 1), 150);
+            }
         }
     });
 
@@ -490,7 +698,7 @@ document.addEventListener('DOMContentLoaded', () => {
     navigateTo(initialPage);
 });
 
-// 暴露到全局，方便调试
+// 暴露到全局
 window.navigateTo = navigateTo;
 </script>
 
