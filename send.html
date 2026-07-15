@@ -150,7 +150,10 @@
             <label class="block text-sm font-medium text-paper-text dark:text-ink-text mb-1.5">标题</label>
             <input type="text" id="title" class="w-full bg-paper-bg dark:bg-ink-bg border border-paper-border dark:border-ink-border rounded-lg px-4 py-3 text-paper-text dark:text-ink-text placeholder:text-paper-muted dark:placeholder:text-ink-muted transition" placeholder="输入文章标题..." required>
         </div>
-
+<div>
+<label class="block text-sm font-medium text-paper-text dark:text-ink-text mb-1.5">作者</label>
+            <input type="text" id="writer" class="w-full bg-paper-bg dark:bg-ink-bg border border-paper-border dark:border-ink-border rounded-lg px-4 py-3 text-paper-text dark:text-ink-text placeholder:text-paper-muted dark:placeholder:text-ink-muted transition" placeholder="输入你的昵称..." required>
+</div>
         <!-- 标签（单独一行） -->
         <div>
             <label class="block text-sm font-medium text-paper-text dark:text-ink-text mb-1.5">标签</label>
@@ -161,6 +164,12 @@
         <div>
             <label class="block text-sm font-medium text-paper-text dark:text-ink-text mb-1.5">正文 <span class="text-paper-muted dark:text-ink-muted text-xs font-normal">(支持 Markdown)</span></label>
             <textarea id="content" rows="12" class="w-full bg-paper-bg dark:bg-ink-bg border border-paper-border dark:border-ink-border rounded-lg px-4 py-3 text-paper-text dark:text-ink-text placeholder:text-paper-muted dark:placeholder:text-ink-muted transition font-mono text-sm leading-relaxed" placeholder="# 标题&#10;&#10;正文内容..." required></textarea>
+        </div>
+<div>
+           
+<label class="block text-sm font-medium text-paper-text dark:text-ink-text mb-1.5">token</label>
+            <input type="password" id="token" class="w-full bg-paper-bg dark:bg-ink-bg border border-paper-border dark:border-ink-border rounded-lg px-4 py-3 text-paper-text dark:text-ink-text placeholder:text-paper-muted dark:placeholder:text-ink-muted transition" placeholder="设置token以对你的文章进行操作" required>
+            <span class="flex items-center gap-2 text-xs text-paper-muted dark:text-ink-muted mb-2">token至少为8位数</span>
         </div>
 
         <!-- 发布按钮 -->
@@ -240,6 +249,7 @@
     const form = document.getElementById('publishForm');
     const btn = document.getElementById('publishBtn');
     const btnText = document.getElementById('btnText');
+    const token = document.getElementById('token');
 
     form.addEventListener('submit', async (e) => {
         e.preventDefault();
@@ -248,8 +258,8 @@
         const tags = document.getElementById('tags').value.trim();
         const content = document.getElementById('content').value;
 
-        if (!title || !content) {
-            log('标题和内容不能为空', 'error');
+        if (!title || !content || !token) {
+            log('标题、内容和token不能为空', 'error');
             return;
         }
 
@@ -264,7 +274,7 @@
             const response = await fetch('https://githubsendblogsbackend.netlify.app/.netlify/functions/publish', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ title, date, tags, content })
+                body: JSON.stringify({ title, date, tags, content, writer, token})
             });
 
             const data = await response.json();
