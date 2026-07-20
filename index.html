@@ -467,7 +467,7 @@
         }
 
         // ================================================================
-        // 6. 文章列表核心功能（分页 + 加载）
+        // 6. 文章列表核心功能（分页 + 加载 + 按日期排序）
         // ================================================================
 
         // 缓存
@@ -483,7 +483,7 @@
 
         const PAGE_SIZE = 10;
 
-        // 从 GitHub 获取文章列表
+        // 从 GitHub 获取文章列表（并按日期排序）
         async function fetchPostsFromGitHub(type) {
             const baseUrl = `https://api.github.com/repos/circlexhy/circlexhy.github.io/contents/${type}/json`;
 
@@ -516,10 +516,20 @@
                     }
                 }
 
-                // 按日期排序（最新的在前）
+                // ===== ✅ 核心排序逻辑：按日期最新的排在最前面 =====
                 posts.sort((a, b) => {
+                    // 优先使用 date 字段
                     if (a.date && b.date) {
-                        return new Date(b.date) - new Date(a.date);
+                        const dateA = new Date(a.date);
+                        const dateB = new Date(b.date);
+                        // 如果日期有效，按日期降序排序（最新的在前）
+                        if (!isNaN(dateA) && !isNaN(dateB)) {
+                            return dateB - dateA;
+                        }
+                    }
+                    // 降级方案：使用 slug 排序（假设 slug 包含日期或按创建顺序）
+                    if (a.slug && b.slug) {
+                        return b.slug.localeCompare(a.slug);
                     }
                     return 0;
                 });
@@ -531,7 +541,6 @@
             }
         }
 
-        // 渲染文章列表
         // 渲染文章列表
         function renderPostList(posts, page, pageSize, type) {
             const totalPosts = posts.length;
