@@ -559,7 +559,7 @@
                 <br>
             </div>
             ${showCreateBtn ? `
-            <a href="send.html" 
+            <a href="send.html"
                class="flex items-center gap-1.5 px-4 py-2 bg-[#3fb950] text-[#0d1117] font-medium text-sm rounded-lg hover:bg-[#2ea043] transition shadow-sm flex-shrink-0 mt-1">
                 <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4"/>
@@ -581,14 +581,16 @@
 
                     html += `
                 <article class="group border-b border-paper-border dark:border-ink-border pb-5 last:border-0">
-                    <a href="/article-details.html?type=${type}&postname=${post.slug}" 
+                    <a href="/article-details.html?type=${type}&postname=${post.slug}"
                        class="block group-hover:text-[#3fb950] transition">
                         <h2 class="text-xl font-serif font-bold text-paper-text dark:text-ink-text group-hover:text-[#3fb950] transition">
                             ${post.title || '无标题'}
                         </h2>
                     </a>
                     <div class="flex flex-wrap items-center gap-3 text-xs text-paper-muted dark:text-ink-muted mt-2">
-                        <span>${post.date || '未知日期'}</span>
+                    <div>
+                        <span>${post.date || '未知日期'} @${post.writer || 'Unknown'}</span>
+                    </div>
                         ${tagsHtml ? `<span>${tagsHtml}</span>` : ''}
                     </div>
                 </article>
@@ -604,14 +606,14 @@
 
                 html += `
             <div class="flex items-center justify-between mt-8 pt-4 border-t border-paper-border dark:border-ink-border">
-                <button onclick="loadPostList('${type}', ${page - 1})" 
+                <button onclick="loadPostList('${type}', ${page - 1})"
                         class="px-4 py-2 text-sm rounded-lg border border-paper-border dark:border-ink-border hover:border-[#3fb950] transition ${prevDisabled}">
                     ← 上一页
                 </button>
                 <span class="text-sm text-paper-muted dark:text-ink-muted">
                     第 ${page} / ${totalPages} 页
                 </span>
-                <button onclick="loadPostList('${type}', ${page + 1})" 
+                <button onclick="loadPostList('${type}', ${page + 1})"
                         class="px-4 py-2 text-sm rounded-lg border border-paper-border dark:border-ink-border hover:border-[#3fb950] transition ${nextDisabled}">
                     下一页 →
                 </button>
