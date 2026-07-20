@@ -263,6 +263,7 @@
             <!-- 文章元信息（日期、标签） -->
             <div id="articleMeta" class="article-meta">
                 <span id="articleDate"></span>
+                <span id="articleWriter"></span>
                 <span id="articleTags"></span>
             </div>
             <!-- 正文 -->
@@ -368,6 +369,11 @@
                     articleDate.textContent = `${postMeta.date}`;
                 } else {
                     articleDate.textContent = '';
+                }
+                if (postMeta.writer) {
+                    articleWriter.textContent = `@${postMeta.writer}`;
+                } else {
+                    articleWriter.textContent = '@Unknown';
                 }
 
                 if (postMeta.tags && postMeta.tags.length > 0) {
