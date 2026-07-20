@@ -3,7 +3,759 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FingertipSpace</title><!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>FingertipSpace</title>
+    <!-- 引入 Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- 引入字体 -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="icon" href="untitled.svg" type="image/svg+xml">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600;700&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', '-apple-system', 'BlinkMacSystemFont', 'sans-serif'],
+                        serif: ['"Noto Serif SC"', 'Georgia', 'serif'],
+                    },
+                    colors: {
+                        paper: {
+                            bg: '#ffffff',
+                            surface: '#fafafa',
+                            text: '#1a1a1a',
+                            muted: '#6b7280',
+                            border: '#e5e7eb',
+                            hover: '#f3f4f6',
+                        },
+                        ink: {
+                            bg: '#191919',
+                            surface: '#202020',
+                            text: '#e5e5e5',
+                            muted: '#9ca3af',
+                            border: '#2e2e2e',
+                            hover: '#2a2a2a',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            background-color: #ffffff;
+            color: #1a1a1a;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+
+        .dark body {
+            background-color: #191919;
+            color: #e5e5e5;
+        }
+
+        .link-underline {
+            background-image: linear-gradient(currentColor, currentColor);
+            background-size: 0% 1px;
+            background-repeat: no-repeat;
+            background-position: 0% 100%;
+            transition: background-size 0.3s ease;
+        }
+
+            .link-underline:hover {
+                background-size: 100% 1px;
+            }
+        /* 导航激活状态 */
+        .nav-link.active {
+            color: #1a1a1a;
+            font-weight: 600;
+        }
+
+        .dark .nav-link.active {
+            color: #e5e5e5;
+        }
+        /* 页面切换淡入动画 */
+        .page-transition {
+            animation: fadeIn 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(8px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #d1d5db;
+            border-radius: 3px;
+        }
+
+        .dark ::-webkit-scrollbar-thumb {
+            background: #4b5563;
+        }
+
+        /* 加载动画 */
+        .loading-spinner {
+            border: 3px solid #e5e7eb;
+            border-top-color: #3fb950;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 0.8s linear infinite;
+        }
+
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+    </style>
+</head>
+<body class="font-sans antialiased selection:bg-gray-200 dark:selection:bg-gray-700">
+
+    <!-- ================= 顶部导航 ================= -->
+    <header class="sticky top-0 z-50 bg-white/80 dark:bg-ink-bg/80 backdrop-blur-md border-b border-paper-border dark:border-ink-border">
+        <div class="max-w-2xl mx-auto px-6 py-4 flex justify-between items-center">
+            <!-- Logo -->
+            <a href="#" onclick="navigateTo('home')" class="text-xl font-serif font-bold text-paper-text dark:text-ink-text hover:text-gray-500 transition cursor-pointer flex items-center gap-2">
+                <img src="untitled.svg" alt="FingertipSpace Icon" class="w-6 h-6 object-contain">
+                <span>FingertipSpace</span>
+            </a>
+            <!-- Nav Links -->
+            <nav class="flex items-center space-x-6 text-sm text-paper-muted dark:text-ink-muted font-medium">
+                <a href="#" data-page="home" class="nav-link link-underline hover:text-paper-text dark:hover:text-ink-text active">首页</a>
+                <a href="#" data-page="blogs" class="nav-link link-underline hover:text-paper-text dark:hover:text-ink-text">博客</a>
+                <a href="#" data-page="articles" class="nav-link link-underline hover:text-paper-text dark:hover:text-ink-text">文章</a>
+                <a href="#" data-page="tools" class="nav-link link-underline hover:text-paper-text dark:hover:text-ink-text">工具</a>
+                <a href="#" data-page="about" class="nav-link link-underline hover:text-paper-text dark:hover:text-ink-text">关于</a>
+                <!-- 搜索按钮 -->
+                <button class="p-1 hover:text-paper-text dark:hover:text-ink-text transition" title="Search (Ctrl+K)">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
+                </button>
+                <!-- 主题切换 -->
+                <button id="theme-toggle" class="p-1 hover:text-paper-text dark:hover:text-ink-text transition" title="Toggle Theme">
+                    <svg class="w-4 h-4 block dark:hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"></path></svg>
+                    <svg class="w-4 h-4 hidden dark:block" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"></path></svg>
+                </button>
+            </nav>
+        </div>
+    </header>
+
+    <!-- ================= 主体内容区 (由 JS 动态渲染) ================= -->
+    <main class="max-w-2xl mx-auto px-6 py-16" id="app">
+        <!-- 默认由 JS 填充 -->
+    </main>
+
+
+    <!-- ================= 页脚 ================= -->
+    <footer class="border-t border-paper-border dark:border-ink-border mt-12">
+        <div class="max-w-2xl mx-auto px-6 py-10 flex flex-col md:flex-row justify-between items-center text-xs text-paper-muted dark:text-ink-muted">
+            <p>&copy; 2026 circlexhy. All rights reserved.</p>
+        </div>
+    </footer>
+
+
+
+    <script>
+        // ================================================================
+        // 1. 主题切换逻辑
+        // ================================================================
+        const themeToggle = document.getElementById('theme-toggle');
+        const htmlEl = document.documentElement;
+
+        if (localStorage.getItem('theme') === 'dark' ||
+            (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+            htmlEl.classList.add('dark');
+        }
+
+        themeToggle.addEventListener('click', () => {
+            htmlEl.classList.toggle('dark');
+            localStorage.setItem('theme', htmlEl.classList.contains('dark') ? 'dark' : 'light');
+        });
+
+        document.addEventListener('keydown', (e) => {
+            if ((e.metaKey || e.ctrlKey) && e.key === 'k') {
+                e.preventDefault();
+                alert('本地搜索功能 (可接入 Hexo 的 algolia 或 local-search 插件)');
+            }
+        });
+
+        // ================================================================
+        // 2. SPA 页面定义
+        // ================================================================
+
+        // 首页内容
+        const homePage = `
+        <section class="mb-20 page-transition">
+            <h1 class="text-3xl font-sans font-light text-paper-text dark:text-ink-text mb-4 leading-snug">
+        Hello, I'm circlexhy.
+</h1>
+            <p class="text-lg text-paper-muted dark:text-ink-muted leading-relaxed">
+                这里是我的网站。主要开发小工具，记录神秘教程<br>
+                相信代码如诗，追求极简与优雅。<br>
+                当前独立ip访问量：
+            </p>
+            <img src="https://w.saobby.com/w/qdddcwh8">
+            <div class="mt-6 flex items-center space-x-4 text-sm text-paper-muted dark:text-ink-muted">
+                <span class="flex items-center">
+                    <svg class="w-4 h-4 mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
+                    Hunan,China
+                </span>
+                <span class="flex items-center">
+                    <svg class="w-4 h-4 mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg>
+                    xhyxhyxhy_xs@qq.com
+                </span>
+                <span class="flex items-center">
+                    <svg class="w-4 h-4 mr-1.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                        <ellipse cx="12" cy="16" rx="7" ry="7.5"/>
+                        <circle cx="12" cy="7.5" r="4.5"/>
+                        <circle cx="10" cy="7" r="0.8" fill="currentColor"/>
+                        <circle cx="14" cy="7" r="0.8" fill="currentColor"/>
+                        <polygon points="11,9.5 13,9.5 12,11.5"/>
+                        <path d="M7 10.5 Q12 13 17 10.5"/>
+                        <path d="M5.5 15 L2 19 L5.5 18.5"/>
+                        <path d="M18.5 15 L22 19 L18.5 18.5"/>
+                        <path d="M8.5 23 L11 23 L10 21.5"/>
+                        <path d="M15.5 23 L13 23 L14 21.5"/>
+                        <path d="M9 14 Q12 18 15 14" stroke="none" fill="currentColor" fill-opacity="0.15"/>
+                    </svg>
+                    3364139412
+                </span>
+            </div>
+        </section>
+
+        <section>
+            <h2 class="text-xs font-bold uppercase tracking-widest text-paper-muted dark:text-ink-muted mb-8 flex items-center">
+                <span class="w-8 h-px bg-paper-border dark:bg-ink-border mr-4"></span>
+                Recommend for you
+            </h2>
+        </section>
+        <br>
+
+        <section>
+            <h2 class="text-xs font-bold uppercase tracking-widest text-paper-muted dark:text-ink-muted mb-6 flex items-center">
+                <span class="w-8 h-px bg-paper-border dark:bg-ink-border mr-4"></span>
+                Comments
+            </h2>
+            <!-- giscus 容器 -->
+            <div id="giscus-container"></div>
+        </section>
+`;
+
+        // 博客/文章列表页（加载状态占位，由 JS 动态填充）
+        const blogsPage = `
+        <section class="page-transition" id="blogs-list">
+            <div class="flex flex-col items-center justify-center py-20">
+                <div class="loading-spinner"></div>
+                <p class="text-paper-muted dark:text-ink-muted mt-4 text-sm">加载中...</p>
+            </div>
+        </section>
+`;
+
+        const articlesPage = `
+        <section class="page-transition" id="articles-list">
+            <div class="flex flex-col items-center justify-center py-20">
+                <div class="loading-spinner"></div>
+                <p class="text-paper-muted dark:text-ink-muted mt-4 text-sm">加载中...</p>
+            </div>
+        </section>
+`;
+
+        const toolsPage = `
+        <section class="page-transition">
+            <h1 class="text-3xl font-sans font-light text-paper-text dark:text-ink-text mb-8 tracking-wide">Tools / 工具</h1>
+            <p class="text-paper-muted dark:text-ink-muted">敬请期待...</p>
+        </section>
+`;
+
+        const aboutPage = `
+        <section class="page-transition">
+            <h1 class="text-3xl font-sans font-light text-paper-text dark:text-ink-text mb-8 tracking-wide">About me / 关于我</h1>
+
+            <!-- GitHub 用户卡片 -->
+            <div id="github-card" class="bg-paper-surface dark:bg-ink-surface border border-paper-border dark:border-ink-border rounded-2xl p-6 mb-8">
+                <!-- 加载状态 -->
+                <div id="github-loading" class="flex items-center justify-center py-8 text-paper-muted dark:text-ink-muted">
+                    <svg class="animate-spin w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                        <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                    </svg>
+                    Loading from github...
+                </div>
+
+                <!-- 用户信息（默认隐藏） -->
+                <div id="github-content" class="hidden">
+                    <div class="flex items-center gap-5 mb-4">
+                        <img id="gh-avatar" src="" alt="GitHub 头像"
+                             class="w-20 h-20 rounded-full border-2 border-paper-border dark:border-ink-border">
+                        <div>
+                            <h2 id="gh-name" class="text-xl font-sans font-light text-paper-text dark:text-ink-text tracking-wide">加载中...</h2>
+                            <a id="gh-link" href="#" target="_blank"
+                               class="text-sm text-paper-muted dark:text-ink-muted hover:text-blue-600 dark:hover:text-blue-400 transition">@加载中...</a>
+                        </div>
+                    </div>
+                    <p id="gh-bio" class="text-paper-muted dark:text-ink-muted text-sm leading-relaxed mb-4">加载中...</p>
+                    <div class="flex flex-wrap gap-6 text-sm">
+                        <div>
+                            <span class="text-paper-muted dark:text-ink-muted">仓库</span>
+                            <span id="gh-repos" class="text-paper-text dark:text-ink-text font-medium ml-1">-</span>
+                        </div>
+                        <div>
+                            <span class="text-paper-muted dark:text-ink-muted">粉丝</span>
+                            <span id="gh-followers" class="text-paper-text dark:text-ink-text font-medium ml-1">-</span>
+                        </div>
+                        <div>
+                            <span class="text-paper-muted dark:text-ink-muted">关注</span>
+                            <span id="gh-following" class="text-paper-text dark:text-ink-text font-medium ml-1">-</span>
+                        </div>
+                        <div>
+                            <span class="text-paper-muted dark:text-ink-muted">位置</span>
+                            <span id="gh-location" class="text-paper-text dark:text-ink-text font-medium ml-1">-</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 错误状态（默认隐藏） -->
+                <div id="github-error" class="hidden text-center py-6 text-[#da3633]">
+                    <p>failed!!!</p>
+                    <p class="text-sm text-paper-muted dark:text-ink-muted mt-1">Please try again.</p>
+                </div>
+<br>
+<div class="text-paper-muted dark:text-ink-muted text-sm leading-relaxed space-y-3">
+                <span class="flex items-center">
+                    <svg class="w-4 h-4 mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
+                    Hunan,China
+                </span>
+                <span class="flex items-center">
+                    <svg class="w-4 h-4 mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg>
+                    xhyxhyxhy_xs@qq.com
+                </span>
+                <span class="flex items-center">
+                    <svg class="w-4 h-4 mr-1.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                        <ellipse cx="12" cy="16" rx="7" ry="7.5"/>
+                        <circle cx="12" cy="7.5" r="4.5"/>
+                        <circle cx="10" cy="7" r="0.8" fill="currentColor"/>
+                        <circle cx="14" cy="7" r="0.8" fill="currentColor"/>
+                        <polygon points="11,9.5 13,9.5 12,11.5"/>
+                        <path d="M7 10.5 Q12 13 17 10.5"/>
+                        <path d="M5.5 15 L2 19 L5.5 18.5"/>
+                        <path d="M18.5 15 L22 19 L18.5 18.5"/>
+                        <path d="M8.5 23 L11 23 L10 21.5"/>
+                        <path d="M15.5 23 L13 23 L14 21.5"/>
+                        <path d="M9 14 Q12 18 15 14" stroke="none" fill="currentColor" fill-opacity="0.15"/>
+                    </svg>
+                    3364139412
+                </span>
+            </div>
+            </div>
+        </section>
+`;
+
+        // ================================================================
+        // 3. 页面路由表
+        // ================================================================
+        const pages = {
+            home: {
+                title: 'FingertipSpace | 首页',
+                content: homePage
+            },
+            blogs: {
+                title: 'FingertipSpace | 博客',
+                content: blogsPage
+            },
+            articles: {
+                title: 'FingertipSpace | 文章',
+                content: articlesPage
+            },
+            tools: {
+                title: 'FingertipSpace | 工具',
+                content: toolsPage
+            },
+            about: {
+                title: 'FingertipSpace | 关于',
+                content: aboutPage
+            }
+        };
+
+        // ================================================================
+        // 4. 加载 giscus 评论
+        // ================================================================
+        let giscusLoaded = false;
+
+        function loadGiscus() {
+            const container = document.getElementById('giscus-container');
+            if (!container) return;
+            if (giscusLoaded) return;
+            if (container.querySelector('iframe')) return;
+
+            const script = document.createElement('script');
+            script.src = 'https://giscus.app/client.js';
+            script.setAttribute('data-repo', 'circlexhy/circlexhy.github.io');
+            script.setAttribute('data-repo-id', 'R_kgDOSf6J8Q');
+            script.setAttribute('data-category', 'Announcements');
+            script.setAttribute('data-category-id', 'DIC_kwDOSf6J8c4C9Pdi');
+            script.setAttribute('data-mapping', 'pathname');
+            script.setAttribute('data-strict', '0');
+            script.setAttribute('data-reactions-enabled', '1');
+            script.setAttribute('data-emit-metadata', '0');
+            script.setAttribute('data-input-position', 'bottom');
+            script.setAttribute('data-theme', 'preferred_color_scheme');
+            script.setAttribute('data-lang', 'zh-CN');
+            script.setAttribute('crossorigin', 'anonymous');
+            script.async = true;
+
+            container.appendChild(script);
+            giscusLoaded = true;
+        }
+
+        // ================================================================
+        // 5. 加载 GitHub 用户信息
+        // ================================================================
+        let githubLoaded = false;
+
+        async function loadGitHubProfile() {
+            const container = document.getElementById('github-content');
+            if (!container) return;
+            if (githubLoaded) return;
+            githubLoaded = true;
+
+            const username = 'circlexhy';
+            const loading = document.getElementById('github-loading');
+            const content = document.getElementById('github-content');
+            const error = document.getElementById('github-error');
+
+            try {
+                const response = await fetch(`https://api.github.com/users/${username}`);
+                if (!response.ok) throw new Error('用户不存在');
+
+                const data = await response.json();
+
+                document.getElementById('gh-avatar').src = data.avatar_url;
+                document.getElementById('gh-name').textContent = data.name || data.login;
+                document.getElementById('gh-link').href = data.html_url;
+                document.getElementById('gh-link').textContent = `@${data.login}`;
+                document.getElementById('gh-bio').textContent = data.bio || 'Nothing';
+                document.getElementById('gh-repos').textContent = data.public_repos || 0;
+                document.getElementById('gh-followers').textContent = data.followers || 0;
+                document.getElementById('gh-following').textContent = data.following || 0;
+                document.getElementById('gh-location').textContent = data.location || 'Unknown';
+
+                loading.classList.add('hidden');
+                content.classList.remove('hidden');
+                error.classList.add('hidden');
+
+            } catch (err) {
+                console.error('加载 GitHub 信息失败:', err);
+                loading.classList.add('hidden');
+                content.classList.add('hidden');
+                error.classList.remove('hidden');
+            }
+        }
+
+        // ================================================================
+        // 6. 文章列表核心功能（分页 + 加载）
+        // ================================================================
+
+        // 缓存
+        let postsCache = {
+            blogs: [],
+            articles: []
+        };
+
+        let currentPage = {
+            blogs: 1,
+            articles: 1
+        };
+
+        const PAGE_SIZE = 10;
+
+        // 从 GitHub 获取文章列表
+        async function fetchPostsFromGitHub(type) {
+            const baseUrl = `https://api.github.com/repos/circlexhy/circlexhy.github.io/contents/${type}/json`;
+
+            try {
+                const response = await fetch(baseUrl, {
+                    headers: { 'Accept': 'application/vnd.github.v3+json' }
+                });
+
+                if (!response.ok) {
+                    if (response.status === 404) {
+                        return [];
+                    }
+                    throw new Error(`GitHub API 请求失败: ${response.status}`);
+                }
+
+                const files = await response.json();
+                const posts = [];
+
+                for (const file of files) {
+                    if (file.name.endsWith('.json')) {
+                        try {
+                            const contentRes = await fetch(file.download_url);
+                            const data = await contentRes.json();
+                            if (data.posts && data.posts.length > 0) {
+                                posts.push(data.posts[0]);
+                            }
+                        } catch (e) {
+                            console.warn(`读取 ${file.name} 失败:`, e);
+                        }
+                    }
+                }
+
+                // 按日期排序（最新的在前）
+                posts.sort((a, b) => {
+                    if (a.date && b.date) {
+                        return new Date(b.date) - new Date(a.date);
+                    }
+                    return 0;
+                });
+
+                return posts;
+            } catch (error) {
+                console.error('获取文章列表失败:', error);
+                return [];
+            }
+        }
+
+        // 渲染文章列表
+        // 渲染文章列表
+        function renderPostList(posts, page, pageSize, type) {
+            const totalPosts = posts.length;
+            const totalPages = Math.ceil(totalPosts / pageSize) || 1;
+            const start = (page - 1) * pageSize;
+            const end = Math.min(start + pageSize, totalPosts);
+            const pagePosts = posts.slice(start, end);
+
+            const typeLabel = type === 'blogs' ? '博客' : '文章';
+
+            // ✅ 只在文章页显示“新文章”按钮
+            const showCreateBtn = type === 'articles';
+
+            let html = `
+    <section class="page-transition">
+        <div class="flex items-start justify-between mb-2">
+            <div>
+                <h1 class="text-3xl font-sans font-light text-paper-text dark:text-ink-text tracking-wide">
+                    ${type === 'blogs' ? 'Blogs / 博客' : 'Articles / 文章'}
+                </h1>
+                <br>
+                <p class="text-paper-muted dark:text-ink-muted text-sm">
+                    共 ${totalPosts} 篇${typeLabel}
+                </p>
+                <br>
+            </div>
+            ${showCreateBtn ? `
+            <a href="send.html" 
+               class="flex items-center gap-1.5 px-4 py-2 bg-[#3fb950] text-[#0d1117] font-medium text-sm rounded-lg hover:bg-[#2ea043] transition shadow-sm flex-shrink-0 mt-1">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 4v16m8-8H4"/>
+                </svg>
+                <span>新文章</span>
+            </a>
+            ` : ''}
+        </div>
+    `;
+
+            if (pagePosts.length === 0) {
+                html += `<p class="text-paper-muted dark:text-ink-muted">暂无文章</p>`;
+            } else {
+                html += `<div class="space-y-6">`;
+                for (const post of pagePosts) {
+                    const tagsHtml = post.tags && post.tags.length > 0
+                        ? post.tags.map(t => `<span class="px-2 py-0.5 bg-paper-hover dark:bg-ink-hover rounded-full text-xs">${t}</span>`).join(' ')
+                        : '';
+
+                    html += `
+                <article class="group border-b border-paper-border dark:border-ink-border pb-5 last:border-0">
+                    <a href="/article-details.html?type=${type}&postname=${post.slug}" 
+                       class="block group-hover:text-[#3fb950] transition">
+                        <h2 class="text-xl font-serif font-bold text-paper-text dark:text-ink-text group-hover:text-[#3fb950] transition">
+                            ${post.title || '无标题'}
+                        </h2>
+                    </a>
+                    <div class="flex flex-wrap items-center gap-3 text-xs text-paper-muted dark:text-ink-muted mt-2">
+                        <span>${post.date || '未知日期'}</span>
+                        ${tagsHtml ? `<span>${tagsHtml}</span>` : ''}
+                    </div>
+                </article>
+            `;
+                }
+                html += `</div>`;
+            }
+
+            // 分页导航
+            if (totalPages > 1) {
+                const prevDisabled = page <= 1 ? 'opacity-50 cursor-not-allowed pointer-events-none' : '';
+                const nextDisabled = page >= totalPages ? 'opacity-50 cursor-not-allowed pointer-events-none' : '';
+
+                html += `
+            <div class="flex items-center justify-between mt-8 pt-4 border-t border-paper-border dark:border-ink-border">
+                <button onclick="loadPostList('${type}', ${page - 1})" 
+                        class="px-4 py-2 text-sm rounded-lg border border-paper-border dark:border-ink-border hover:border-[#3fb950] transition ${prevDisabled}">
+                    ← 上一页
+                </button>
+                <span class="text-sm text-paper-muted dark:text-ink-muted">
+                    第 ${page} / ${totalPages} 页
+                </span>
+                <button onclick="loadPostList('${type}', ${page + 1})" 
+                        class="px-4 py-2 text-sm rounded-lg border border-paper-border dark:border-ink-border hover:border-[#3fb950] transition ${nextDisabled}">
+                    下一页 →
+                </button>
+            </div>
+        `;
+            }
+
+            html += `</section>`;
+            return html;
+        }
+
+        // 加载文章列表（外部调用）
+        async function loadPostList(type, page = 1) {
+            // 如果缓存为空，从 GitHub 获取
+            if (postsCache[type].length === 0) {
+                const container = document.getElementById(`${type}-list`);
+                if (container) {
+                    container.innerHTML = `
+                    <div class="flex flex-col items-center justify-center py-20">
+                        <div class="loading-spinner"></div>
+                        <p class="text-paper-muted dark:text-ink-muted mt-4 text-sm">加载中...</p>
+                    </div>
+                `;
+                }
+
+                const posts = await fetchPostsFromGitHub(type);
+                postsCache[type] = posts;
+            }
+
+            // 更新当前页码
+            const totalPages = Math.ceil(postsCache[type].length / PAGE_SIZE) || 1;
+            currentPage[type] = Math.max(1, Math.min(page, totalPages));
+
+            // 渲染列表
+            const container = document.getElementById(`${type}-list`);
+            if (container) {
+                container.innerHTML = renderPostList(
+                    postsCache[type],
+                    currentPage[type],
+                    PAGE_SIZE,
+                    type
+                );
+            }
+        }
+
+        // 全局暴露
+        window.loadPostList = loadPostList;
+
+        // ================================================================
+        // 7. 导航核心函数
+        // ================================================================
+
+        function navigateTo(pageName) {
+            const page = pages[pageName];
+            if (!page) return;
+
+            const app = document.getElementById('app');
+            app.innerHTML = page.content;
+
+            document.title = page.title;
+            history.pushState({ page: pageName }, '', `#${pageName}`);
+
+            document.querySelectorAll('.nav-link').forEach(link => {
+                link.classList.toggle('active', link.dataset.page === pageName);
+            });
+
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+
+            // 首页加载评论
+            if (pageName === 'home') {
+                giscusLoaded = false;
+                setTimeout(loadGiscus, 200);
+            }
+
+            // 关于页加载 GitHub 信息
+            if (pageName === 'about') {
+                setTimeout(loadGitHubProfile, 200);
+            }
+
+            // 博客/文章页加载列表
+            if (pageName === 'blogs') {
+                currentPage.blogs = 1;
+                setTimeout(() => loadPostList('blogs', 1), 100);
+            }
+            if (pageName === 'articles') {
+                currentPage.articles = 1;
+                setTimeout(() => loadPostList('articles', 1), 100);
+            }
+        }
+
+        // ================================================================
+        // 8. 绑定事件
+        // ================================================================
+
+        document.addEventListener('DOMContentLoaded', () => {
+            // 导航点击
+            document.querySelectorAll('.nav-link').forEach(link => {
+                link.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    const page = link.dataset.page;
+                    if (page) navigateTo(page);
+                });
+            });
+
+            // 浏览器前进/后退
+            window.addEventListener('popstate', (e) => {
+                const page = e.state?.page || 'home';
+                const pageData = pages[page];
+                if (pageData) {
+                    document.getElementById('app').innerHTML = pageData.content;
+                    document.title = pageData.title;
+                    document.querySelectorAll('.nav-link').forEach(link => {
+                        link.classList.toggle('active', link.dataset.page === page);
+                    });
+
+                    // 如果是博客/文章页，重新加载列表
+                    if (page === 'blogs') {
+                        currentPage.blogs = 1;
+                        setTimeout(() => loadPostList('blogs', 1), 150);
+                    }
+                    if (page === 'articles') {
+                        currentPage.articles = 1;
+                        setTimeout(() => loadPostList('articles', 1), 150);
+                    }
+                }
+            });
+
+            // 初始化：从 URL hash 读取，默认首页
+            const hash = window.location.hash.replace('#', '');
+            const initialPage = pages[hash] ? hash : 'home';
+            navigateTo(initialPage);
+        });
+
+        // 暴露到全局
+        window.navigateTo = navigateTo;
+    </script>
+
+</body>
+</html>
     <!-- 引入 Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- 引入字体 -->
