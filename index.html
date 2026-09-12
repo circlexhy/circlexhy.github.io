@@ -400,7 +400,7 @@
             }
         };
 
-
+        
         // ================================================================
         // 4. 加载 giscus 评论
         // ================================================================
@@ -495,7 +495,7 @@
 
         // 从 GitHub 获取文章列表（并按日期排序）
         async function fetchPostsFromGitHub(type) {
-            const baseUrl = `https://circlexhy.github.io/${type}/json`;
+            const baseUrl = `https://api.github.com/repos/circlexhy/circlexhy.github.io/contents/${type}/json`;
 
             try {
                 const response = await fetch(baseUrl, {
