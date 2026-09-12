@@ -329,7 +329,7 @@
 
             try {
                 // ===== 第一步：获取 JSON 元数据 =====
-                const jsonUrl = `https://raw.githubusercontent.com/circlexhy/circlexhy.github.io/refs/heads/main/${type}/json/${postName}.json`;
+                const jsonUrl = `https://circlexhy.github.io/${type}/json/${postName}.json`;
                 const jsonResponse = await fetch(jsonUrl);
 
                 if (!jsonResponse.ok) {
@@ -347,7 +347,7 @@
                 }
 
                 // ===== 第二步：获取 MD 正文 =====
-                const mdUrl = `https://raw.githubusercontent.com/circlexhy/circlexhy.github.io/refs/heads/main/${type}/posts/${postName}.md`;
+                const mdUrl = `https://circlexhy.github.io/${type}/posts/${postName}.md`;
                 const mdResponse = await fetch(mdUrl);
 
                 if (!mdResponse.ok) {
